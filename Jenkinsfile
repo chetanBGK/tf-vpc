@@ -9,7 +9,7 @@ pipeline{
         }
 
        
-  stages {
+  
         stage('Terraform Init') {
             steps {
                 withCredentials([[
@@ -21,7 +21,7 @@ pipeline{
                 }
             }
         }
-    }
+    
 
   stage('plan') {
     steps {
