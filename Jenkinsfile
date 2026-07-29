@@ -1,15 +1,15 @@
-pipeline{
+pipeline {
     agent any
 
-    stages{
-        stage("checkout"){
-            steps{
-                git branch: 'main', url: 'https://github.com/chetanBGK/tf-vpc.git'
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/chetanBGK/tf-vpc.git'
             }
         }
 
-       
-  
         stage('Terraform Init') {
             steps {
                 withCredentials([[
@@ -17,26 +17,30 @@ pipeline{
                     credentialsId: 'aws-creds'
                 ]]) {
                     sh 'terraform init'
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-creds'
+                ]]) {
                     sh 'terraform plan'
                 }
             }
         }
-    
 
-  stage('plan') {
-    steps {
-        sh 'terraform plan'
-    }
-  }
-
-  stage('apply') {
-    steps {
-        sh 'terraform apply -auto-approve'
-    }
-  }
-
-
-
-
+        stage('Terraform Apply') {
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-creds'
+                ]]) {
+                    sh 'terraform apply -auto-approve'
+                }
+            }
+        }
     }
 }
