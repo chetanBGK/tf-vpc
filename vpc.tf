@@ -5,7 +5,9 @@ resource "aws_vpc" "tf-vpc" {
     Name = "tf-vpc"
   }
 }
-
+provider "aws" {
+  region = "ap-south-1"
+}
 resource "aws_internet_gateway" "tf-gw" {
   vpc_id = aws_vpc.tf-vpc.id
 
