@@ -16,7 +16,10 @@ pipeline {
                     $class: 'AmazonWebServicesCredentialsBinding',
                     credentialsId: 'aws-creds'
                 ]]) {
-                    sh 'terraform destroy'
+                   sh '''
+                        terraform init
+                        terraform destroy -auto-approve
+                    '''
                 }
             }
         }
